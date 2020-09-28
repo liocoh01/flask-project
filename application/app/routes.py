@@ -1,15 +1,16 @@
-from app import app
+import connexion
 import pymysql.cursors
 from flask import jsonify
 
-@app.route('/visit')
-def index():
+
+
+
+def get_people():
     # Connect to the database
-    app.config.from_pyfile('app.conf')
-    connection = pymysql.connect(host=app.config.get('DB_HOST'),
-                                 user=app.config.get('DB_USER'),
-                                 password=app.config.get('DB_PASS'),
-                                 db=app.config.get('DB'),
+    connection = pymysql.connect(host=conf.config.get('DB_HOST'),
+                                 user=conf.config.get('DB_USER'),
+                                 password=conf.config.get('DB_PASS'),
+                                 db=conf.config.get('DB'),
                                  charset='utf8mb4',
                                  cursorclass=pymysql.cursors.DictCursor)
 
@@ -23,3 +24,9 @@ def index():
             return jsonify(result)
     finally:
         connection.close()
+
+app = connexion.FlaskApp(__name__, specification_dir='swagger/')
+app.add_api('swagger.yaml', arguments={'title': 'DB api'})
+conf = app.app
+conf.config.from_pyfile('app.conf')
+
