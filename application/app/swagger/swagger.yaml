@@ -28,6 +28,35 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
+  /people/{lastname}:
+    get:
+      operationId: app.routes.get_by_last_name
+      tags: [DB]
+      description:
+        Gets list of `DB` objects.
+      parameters:
+        - $ref: '#/parameters/last'
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            title: ArrayOfpbjects
+            type: object
+            items:
+              $ref: '#/definitions/Person'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+parameters:
+  last:
+    name: lastname
+    description: last name
+    in: path
+    type: string
+    required: true
+
 definitions:
   db_rows:
     type: object
